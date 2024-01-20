@@ -11,5 +11,9 @@ typedef struct
 // ByteArr is struct
 ByteArr B64toByte(char* B64String);
 
-// Not using ByteArr, this is easier and more formal.
+/// @brief Translate a Byte array into a Base64 string. (RFC4648 Compliant) -DOUBLE CHECK IF TRUE-
+/// @param Array A byte array to be translated to Base64.
+/// @param Size The size of the byte array to translate.
+/// @returns An allocated Base64, null terminated string.
+/// @warning Returns an allocated string. MUST be de-allocated to prevent memory leak.
 char* BytetoB64(uint8_t* Array, size_t Size);
