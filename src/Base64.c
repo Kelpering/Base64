@@ -19,6 +19,7 @@ uint8_t Invalid[] =
     0x60, 0x7B, 0x7C, 0x7D, 0x7E, 0x7F, 
 };
 //! This byte array can also be improvised after 128 with a '>'
+//! and another low '<'
 
 ByteArr B64toByte(char* B64String)
 {
