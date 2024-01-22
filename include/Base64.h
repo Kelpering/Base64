@@ -1,12 +1,17 @@
 #pragma once
 #include <stdlib.h>
 #include <stdint.h>
+#include <stdbool.h>
+#include <stdio.h>
 
 typedef struct
 {
     uint8_t* Array;
     size_t   Size;
 } ByteArr;
+
+// We can make this public, as it is a useful function.
+bool ValidateB64(char* B64String);
 
 // ByteArr is struct
 ByteArr B64toByte(char* B64String);

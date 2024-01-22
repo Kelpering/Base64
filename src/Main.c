@@ -5,6 +5,7 @@
 // Byte array w/ variable size, Vector
 
 #include <stdio.h>
+#include <stdbool.h>
 #include "../include/Base64.h"
 
 int main()

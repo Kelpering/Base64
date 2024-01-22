@@ -1,17 +1,16 @@
 #include "../include/Base64.h"
-#include <stdio.h>
 
 char Base64Arr[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 uint8_t Invalid[] = 
 {   
-    0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 
+    /*0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 
     0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 
 
     0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 
     0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F, 
 
-    0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 
-    0x28, 0x29, 0x2A, 0x2C, 0x2D, 0x2E, 
+    0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27,
+    0x28, 0x29, 0x2A, 0x2C, 0x2D, 0x2E,*/ 
     0x3A, 0x3B, 0x3C, 0x3E, 0x3F, 
 
     0x40, 0x5B, 0x5C, 0x5D, 0x5E, 0x5F, 
@@ -21,18 +20,27 @@ uint8_t Invalid[] =
 //! This byte array can also be improvised after 128 with a '>'
 //! and another low '<'
 
+bool ValidateB64(char* B64String)
+{
+    //? Check Size (Faster, so begin with it), (Chars % 4) = 0 
+
+    //? For each byte, until '/0' (Null terminator of string)
+        //? Check OoB greaters and lesses '>' & '<'
+        //? Check invalid Array for each 
+}
+
 ByteArr B64toByte(char* B64String)
 {
-    //? Validate B64 string
-    for(size_t i = 0; B64String[i] != '\0'; i++)
-    {
-        for (int j = 0; j < 128; j++)
-        {
-            // Cap J to be at most, size of Invalid[]
-            if (B64String[i] > 127 || B64String[i] == Invalid[j])
-                // Mark invalid
-        }
-    }    ByteArr test = 
+    ValidateB64(B64String);
+        //! If not valid, return NULL pointer and a size of 0.
+    //? Calculate size of ByteArr, then malloc
+    //? while loop through the string until the last 4 characters
+    //? Possibly fix last 4 automatically, if not, use special alg for those alone.
+    
+    //? When ByteArr is ready, set pointer to ByteArr.Array and size to its size.
+    //? return ByteArr
+    //! ByteArr itself should not need to be freed, but Array* need to be.
+    ByteArr test = 
     {
         .Array = NULL,
         .Size = 0
