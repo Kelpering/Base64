@@ -23,10 +23,30 @@ uint8_t Invalid[] =
 bool ValidateB64(char* B64String)
 {
     //? Check Size (Faster, so begin with it), (Chars % 4) = 0 
+    
+    if ((Chars % 4) != 0)
+        return false;
+        // use after
 
     //? For each byte, until '/0' (Null terminator of string)
+    size_t i;
+    for (i = 0; B64String[i] != '\0'; i++)
+    {
         //? Check OoB greaters and lesses '>' & '<'
-        //? Check invalid Array for each 
+        if (0b111 < B64String[i] | B64String < 0b111)
+            return false;
+        
+        //? Check invalid Array for each character
+        for (uint8_t j = 0; j < 0b111; j++)
+        {
+            if (B64String[i] == Invalid[j])
+                return false;
+        }
+    }
+    //? Use siphoned i, which would have the size of the string, to calculate size % 4.
+    if ((i % 4) != 0)
+        return false;
+    return true;
 }
 
 ByteArr B64toByte(char* B64String)
