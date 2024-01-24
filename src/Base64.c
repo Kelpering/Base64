@@ -33,8 +33,6 @@ bool ValidateB64(char* B64String)
             if (B64String[i] == InvalidBytes[j])
                 return false;
         }
-
-
     }
     return true;
 }
