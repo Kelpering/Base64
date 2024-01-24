@@ -1,51 +1,38 @@
 #include "../include/Base64.h"
 
 char Base64Arr[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-uint8_t Invalid[] = 
-{   
-    /*0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 
-    0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 
-
-    0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 
-    0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F, 
-
-    0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27,
-    0x28, 0x29, 0x2A, 0x2C, 0x2D, 0x2E,*/ 
-    0x3A, 0x3B, 0x3C, 0x3E, 0x3F, 
-
-    0x40, 0x5B, 0x5C, 0x5D, 0x5E, 0x5F, 
-
-    0x60, 0x7B, 0x7C, 0x7D, 0x7E, 0x7F, 
-};
+uint8_t InvalidBytes[] = {0x2C, 0x2D, 0x2E, 0x3A, 0x3B, 0x3C, 0x3E, 0x3F, 0x40};
 //! This byte array can also be improvised after 128 with a '>'
 //! and another low '<'
 
 bool ValidateB64(char* B64String)
 {
-    //? Check Size (Faster, so begin with it), (Chars % 4) = 0 
-    
-    if ((Chars % 4) != 0)
-        return false;
-        // use after
+    //? Find size (exclude '\0')
+    size_t StrSize;
+    for (StrSize = 0; B64String[StrSize] != '\0'; StrSize++);
 
-    //? For each byte, until '/0' (Null terminator of string)
-    size_t i;
-    for (i = 0; B64String[i] != '\0'; i++)
+    //? Check remainder, as it is fastest.
+    if (StrSize % 4 != 0)
+        return false;
+
+    for (size_t i = 0; i < StrSize; i++)
     {
-        //? Check OoB greaters and lesses '>' & '<'
-        if (0b111 < B64String[i] | B64String < 0b111)
+        //? Checks majority as OoB
+        if ((0x2A >= B64String[i]) | (B64String[i] >= 0x5B))
             return false;
         
-        //? Check invalid Array for each character
-        for (uint8_t j = 0; j < 0b111; j++)
+        //? Check Invalid characters
+        for (uint8_t j = 0; j < 10; j++)
         {
-            if (B64String[i] == Invalid[j])
+            //? If the character is invalid, return false.
+            if (B64String[i] == InvalidBytes[j])
                 return false;
         }
+
+        //? If '=' is anywhere but the last 2 characters, return false.
+        if (B64String[i] == '=' && i < (StrSize - 2))
+            return false;
     }
-    //? Use siphoned i, which would have the size of the string, to calculate size % 4.
-    if ((i % 4) != 0)
-        return false;
     return true;
 }
 
@@ -80,9 +67,9 @@ char* BytetoB64(uint8_t* Array, size_t Size)
     for (size_t i = 0, j = 0; i < Size - (Size % 3); i+=3)
     {
         B64String[j++] = Base64Arr[(Array[i] >> 2)];
-        B64String[j++] = Base64Arr[((Array[i] & 0b11) << 4) | (Array[i+1] >> 4)];
-        B64String[j++] = Base64Arr[((Array[i+1] & 0b1111) << 2) | (Array[i+2] >> 6)];
-        B64String[j++] = Base64Arr[(Array[i+2] & 0b111111)];
+        B64String[j++] = Base64Arr[((Array[i] & 0x03) << 4) | (Array[i+1] >> 4)];
+        B64String[j++] = Base64Arr[((Array[i+1] & 0x0F) << 2) | (Array[i+2] >> 6)];
+        B64String[j++] = Base64Arr[(Array[i+2] & 0x3F)];
     }
     //! Switch is temporary; it should be further automatable.
     switch (Size % 3)
@@ -90,15 +77,15 @@ char* BytetoB64(uint8_t* Array, size_t Size)
     case 1:
         //? Size / 3 has a remainder of 1 (2 bytes padding)
         B64String[StringSize - 5] = Base64Arr[(Array[Size - 1] >> 2)];
-        B64String[StringSize - 4] = Base64Arr[((Array[Size - 1] & 0b11) << 4) | 0];
+        B64String[StringSize - 4] = Base64Arr[((Array[Size - 1] & 0x03) << 4) | 0];
         B64String[StringSize - 3] = '=';
         B64String[StringSize - 2] = '=';
         break;
     case 2:
         //? Size / 3 has a remainder of 2 (1 byte padding)
         B64String[StringSize - 5] = Base64Arr[(Array[Size - 2] >> 2)];
-        B64String[StringSize - 4] = Base64Arr[((Array[Size - 2] & 0b11) << 4) | (Array[Size - 1] >> 4)];
-        B64String[StringSize - 3] = Base64Arr[((Array[Size - 1] & 0b1111) << 2) | 0];
+        B64String[StringSize - 4] = Base64Arr[((Array[Size - 2] & 0x03) << 4) | (Array[Size - 1] >> 4)];
+        B64String[StringSize - 3] = Base64Arr[((Array[Size - 1] & 0x0F) << 2) | 0];
         B64String[StringSize - 2] = '=';
         break;
     }
