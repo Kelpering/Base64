@@ -1,7 +1,7 @@
 #include "../include/Base64.h"
 
 char Base64Arr[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-uint8_t InvalidBytes[] = {0x2C, 0x2D, 0x2E, 0x3A, 0x3B, 0x3C, 0x3E, 0x3F, 0x40};
+uint8_t InvalidBytes[] = {0x2C, 0x2D, 0x2E, 0x3A, 0x3B, 0x3C, 0x3E, 0x3F, 0x40, 0x5B, 0x5C, 0x5D, 0x5E, 0x5F, 0x60};
 //! This byte array can also be improvised after 128 with a '>'
 //! and another low '<'
 
@@ -18,20 +18,23 @@ bool ValidateB64(char* B64String)
     for (size_t i = 0; i < StrSize; i++)
     {
         //? Checks majority as OoB
-        if ((0x2A >= B64String[i]) | (B64String[i] >= 0x5B))
+        //! Lowercase is giving errors
+        if ((0x2A >= B64String[i]) | (B64String[i] >= 0x7B))
             return false;
         
+        //? If '=' is anywhere but the last 2 characters, return false.
+        if (B64String[i] == '=' && i < (StrSize - 2))
+            return false;
+
         //? Check Invalid characters
-        for (uint8_t j = 0; j < 10; j++)
+        for (uint8_t j = 0; j < 15; j++)
         {
             //? If the character is invalid, return false.
             if (B64String[i] == InvalidBytes[j])
                 return false;
         }
 
-        //? If '=' is anywhere but the last 2 characters, return false.
-        if (B64String[i] == '=' && i < (StrSize - 2))
-            return false;
+
     }
     return true;
 }

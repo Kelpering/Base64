@@ -10,13 +10,9 @@
 
 int main()
 {
-    // uint8_t Data[] = {'y', 'n'};
-    // BytetoB64(Data, 2);
-    printf("IsB64: %d\n", ValidateB64("AE==")); //* Valid
-    printf("IsB64: %d\n", ValidateB64("A===")); //! Invalid
-    printf("IsB64: %d\n", ValidateB64("A[==")); //! Invalid
-    printf("IsB64: %d\n", ValidateB64("AB=")); //! Invalid
-    printf("IsB64: %d\n", ValidateB64("ABC=")); //* Valid
-    printf("IsB64: %d\n", ValidateB64("AECD")); //* Valid
+    uint8_t Data[] = {'y', 'n'};
+    char* test = BytetoB64(Data, 2);
+    printf("%s\n", test);
+    printf("IsB64: %d\n", ValidateB64("Aa==")); //* Valid
     return 0;
 }
