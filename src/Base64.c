@@ -39,8 +39,19 @@ bool ValidateB64(char* B64String)
 
 ByteArr B64toByte(char* B64String)
 {
-    ValidateB64(B64String);
-        //! If not valid, return NULL pointer and a size of 0.
+    if (ValidateB64(B64String) == false)
+    {
+        ByteArr Fail = 
+        {
+            Null, 0
+        };
+        return Fail;
+    }
+
+            //! If not valid, return NULL pointer and a size of 0.
+    size_t StrSize;
+    for (StrSize; B64String[StrSize] != '/0'; StrSize++);
+    (StrSize * 4)/3;
     //? Calculate size of ByteArr, then malloc
     //? while loop through the string until the last 4 characters
     //? Possibly fix last 4 automatically, if not, use special alg for those alone.
