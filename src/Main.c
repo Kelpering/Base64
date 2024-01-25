@@ -5,11 +5,17 @@
 
 int main()
 {
-    uint8_t Data[] = {'y', 'n'};
-    char* test = BytetoB64(Data, 2);
-    B64toByte("eW4fabc=");
-    printf("B64String returned: %s\n", test);
+    uint8_t Data[] = "Test string, can use any binary data.";
+    char* test;
+    ByteArr testArr;
+    
+    test = BytetoB64(Data, sizeof(Data));
+    printf("String returned: %s\n", test);
     printf("IsB64: %s\n", ValidateB64(test) ? "True" : "False"); //* Valid
+
+    testArr = B64toByte(test);
+    printf("Size of Data: %d", testArr.Size);
+    printf("Data string salvaged: %s\n", testArr.Array);
 
     return 0;
 }
