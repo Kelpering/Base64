@@ -2,8 +2,6 @@
 
 char Base64Arr[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 uint8_t InvalidBytes[] = {0x2C, 0x2D, 0x2E, 0x3A, 0x3B, 0x3C, 0x3E, 0x3F, 0x40, 0x5B, 0x5C, 0x5D, 0x5E, 0x5F, 0x60};
-//! This byte array can also be improvised after 128 with a '>'
-//! and another low '<'
 
 bool ValidateB64(char* B64String)
 {
@@ -34,37 +32,36 @@ bool ValidateB64(char* B64String)
                 return false;
         }
     }
+
+    if (B64String[StrSize-2] == '=' && B64String[StrSize-1] != '=')
+        return false;
+
     return true;
 }
 
 ByteArr B64toByte(char* B64String)
 {
+    //? If not valid, return NULL pointer and a size of 0.
     if (ValidateB64(B64String) == false)
-    {
-        ByteArr Fail = 
-        {
-            Null, 0
-        };
-        return Fail;
-    }
+        return (ByteArr) {NULL, 0};
 
-            //! If not valid, return NULL pointer and a size of 0.
-    size_t StrSize;
-    for (StrSize; B64String[StrSize] != '/0'; StrSize++);
-    (StrSize * 4)/3;
-    //? Calculate size of ByteArr, then malloc
-    //? while loop through the string until the last 4 characters
-    //? Possibly fix last 4 automatically, if not, use special alg for those alone.
+    size_t CharSize;
+    ByteArr B64Arr;
+
+    // Just chars, not null terminator
+    for (CharSize; B64String[CharSize] != '\0'; CharSize++);
     
-    //? When ByteArr is ready, set pointer to ByteArr.Array and size to its size.
-    //? return ByteArr
+    // Calculate size of ByteArr, then malloc
+    B64Arr.Size = (CharSize / 4)*3;
+    B64Arr.Array = malloc(B64Arr.Size);
+    
+    // while loop through the string until the last 4 characters
+    // Possibly fix last 4 automatically, if not, use special alg for those alone.
+    
+    // When ByteArr is ready, set pointer to ByteArr.Array and size to its size.
+    // return ByteArr
     //! ByteArr itself should not need to be freed, but Array* need to be.
-    ByteArr test = 
-    {
-        .Array = NULL,
-        .Size = 0
-    };
-    return test;
+    return B64Arr;
 }
 
 char* BytetoB64(uint8_t* Array, size_t Size)

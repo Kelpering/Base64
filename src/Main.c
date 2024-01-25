@@ -13,7 +13,9 @@ int main()
 {
     uint8_t Data[] = {'y', 'n'};
     char* test = BytetoB64(Data, 2);
-    printf("%s\n", test);
-    printf("IsB64: %d\n", ValidateB64("Aa==")); //* Valid
+    B64toByte("eW4fabc=");
+    printf("B64String returned: %s\n", test);
+    printf("IsB64: %s\n", ValidateB64(test) ? "True" : "False"); //* Valid
+
     return 0;
 }

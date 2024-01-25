@@ -10,9 +10,10 @@ typedef struct
     size_t   Size;
 } ByteArr;
 
-// We can make this public, as it is a useful function.
+/// @brief Checks whether a string is Base64 encoding.
+/// @param B64String The string to check.
+/// @return A boolean value.
 bool ValidateB64(char* B64String);
-
 
 /// @brief Translates a Base64 string into a byte array. (RFC4748 Compliant) -DOUBLE CHECK IF TRUE-
 /// @param B64String A Base64 string to be translated, null terminated.
