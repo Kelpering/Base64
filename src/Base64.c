@@ -1,6 +1,7 @@
 #include "../include/Base64.h"
 
 char Base64Arr[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+// Make inverse of array, should be about 128 max size, can be lowered to probably ~90 but whitespace between lowercase plays a factor.
 uint8_t InvalidBytes[] = {0x2C, 0x2D, 0x2E, 0x3A, 0x3B, 0x3C, 0x3E, 0x3F, 0x40, 0x5B, 0x5C, 0x5D, 0x5E, 0x5F, 0x60};
 
 bool ValidateB64(char* B64String)
@@ -54,6 +55,16 @@ ByteArr B64toByte(char* B64String)
     // Calculate size of ByteArr, then malloc
     B64Arr.Size = (CharSize / 4)*3;
     B64Arr.Array = malloc(B64Arr.Size);
+
+    for (size_t i = 0, j = 0; i < CharSize - 4; i+=4)
+    {
+        //! Double check the math; it was a complete guess.
+        //! I know that the B64String[i] is wrong, we need to convert that into B64 bytes.
+        B64Arr.Array[j++] = (B64String[i] << 2) | (B64String[i+1] >> 4)                     //? (First 6), next 2
+        B64Arr.Array[j++] = ((B64String[i+1] << 2) & 0b00111100) | ((B64String[i+2] >> 2))  //? Next 4, third 4
+        B64Arr.Array[j++] = ((B64String[i+2] << 6) & 0b00110000) | B64String[i+3]           //? third 2, (fourth 6)
+    }
+    //! Here needs the final 4 with 
     
     // while loop through the string until the last 4 characters
     // Possibly fix last 4 automatically, if not, use special alg for those alone.
