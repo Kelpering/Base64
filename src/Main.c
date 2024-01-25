@@ -1,9 +1,3 @@
-//? Convert Base64 String into [?]
-//? Convert [?] into Base64 String
-
-// [?] options
-// Byte array w/ variable size, Vector
-
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdint.h>
