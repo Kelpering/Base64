@@ -51,38 +51,24 @@ ByteArr B64toByte(char* B64String)
     ByteArr B64Arr;
 
     // Just chars, not null terminator
-    for (CharSize; B64String[CharSize] != '\0'; CharSize++);
+    for (CharSize = 0; B64String[CharSize] != '\0'; CharSize++);
     
     // Calculate size of ByteArr, then malloc
     B64Arr.Size = (CharSize / 4)*3;
     B64Arr.Array = malloc(B64Arr.Size);
 
-    for (size_t i = 0, j = 0; i < CharSize - 4; i+=4)
+    for (size_t i = 0, j = 0; i < CharSize; i+=4)
     {
-        //! Double check the math; it was a complete guess.
-        //! I know that the B64String[i] is wrong, we need to convert that into B64 bytes.
-        B64Arr.Array[j++] = (B64String[i] << 2) | (B64String[i+1] >> 4)                     //? (First 6), next 2
-        B64Arr.Array[j++] = ((B64String[i+1] << 2) & 0b00111100) | ((B64String[i+2] >> 2))  //? Next 4, third 4
-        B64Arr.Array[j++] = ((B64String[i+2] << 6) & 0b00110000) | B64String[i+3]           //? third 2, (fourth 6)
+        //* Fixed inverse and math, this section should be clear
+        B64Arr.Array[j++] = (inversePossible[B64String[i]] << 2) | (inversePossible[B64String[i+1]] >> 4);                     //? First 6, next 2
+        B64Arr.Array[j++] = ((inversePossible[B64String[i+1]] << 4) & 0b11110000) | ((inversePossible[B64String[i+2]] >> 2));  //? Next 4, third 4
+        B64Arr.Array[j++] = ((inversePossible[B64String[i+2]] << 6) & 0b11000000) | inversePossible[B64String[i+3]];           //? third 2, fourth 6
     }
-    //! OR if reaches =, then cut off byte array.
-    // Second last '='
+    // Now here, count and remove X amount of bytes for X amount of '=' characters in the B64 string.
     if (B64String[CharSize-1] == '=')
-    {
-        // Last 2 bytes are padding
-    }
+        B64Arr.Size -= 2;
     else if (B64String[CharSize] == '=')
-    {
-        // Last 1 Byte is padding
-    }
-    else
-    {
-        // No bytes are padding5
-    }
-    //! Here needs the final 4 with 
-    
-    // while loop through the string until the last 4 characters
-    // Possibly fix last 4 automatically, if not, use special alg for those alone.
+        B64Arr.Size -= 1;
     
     //! ByteArr itself should not need to be freed, but Array* need to be.
     return B64Arr;
