@@ -79,7 +79,7 @@ ByteArr B64toByte(char* B64String)
 char* BytetoB64(uint8_t* Array, size_t Size)
 {
     //? Size of string generated in Malloc
-    size_t StringSize = 4*((Size + 2 - ((Size - 1) % 3))/3);
+    size_t StringSize = 4*((Size + 2 - ((Size - 1) % 3))/3) + 1;
     //! StringSize must have a better equation for this.
 
     //? The malloc string here is 4 characters per 3 bytes w/ pad, plus 1 '\0'.
