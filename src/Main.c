@@ -21,7 +21,7 @@ int main()
     printf("IsB64: %s\n\n", ValidateB64(test) ? "True" : "False"); //* Valid
 
     testArr = B64toByte(test);
-    printf("Size of Data: %d\n", testArr.Size);
+    printf("Size of Data: %lu\n", testArr.Size);
     printf("Data Returned: \n");
     PrintData(testArr.Array, testArr.Size);
 
