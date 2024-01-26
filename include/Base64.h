@@ -10,15 +10,15 @@ typedef struct
 } ByteArr;
 
 /// @brief Checks whether a string is Base64 encoding.
-/// @param B64String The string to check.
-/// @return A boolean value.
+/// @param B64String Null terminated string.
+/// @returns A boolean True/False.
 bool ValidateB64(char* B64String);
 
 /// @brief Translates a Base64 string into a byte array. (RFC4748 Compliant) -DOUBLE CHECK IF TRUE-
 /// @param B64String A Base64 string to be translated, null terminated.
 /// @returns A ByteArr struct, containing an allocated uint8_t array pointer and the Size of said array.
-/// @note If B64String is found to be an invalid Base64 string, the function returns (ByteArr) {NULL, 0}.
 /// @warning Returns an allocated array. MUST be de-allocated to prevent memory leak.
+/// @note If B64String is found to be an invalid Base64 string, the function returns (ByteArr) {NULL, 0}.
 ByteArr B64toByte(char* B64String);
 
 /// @brief Translate a byte array into a Base64 string. (RFC4648 Compliant) -DOUBLE CHECK IF TRUE-
