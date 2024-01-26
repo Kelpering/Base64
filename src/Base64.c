@@ -80,6 +80,7 @@ char* BytetoB64(uint8_t* Array, size_t Size)
 {
     //? Size of string generated in Malloc
     //! StringSize must have a better equation for this.
+    //* Size + 2 - ((Size - 1) % 3) might fix the issue
     size_t StringSize;
     if (Size % 3 == 0)
         StringSize = (4*(Size + (Size % 3))/3) + 1;
