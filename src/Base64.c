@@ -79,20 +79,10 @@ ByteArr B64toByte(char* B64String)
 char* BytetoB64(uint8_t* Array, size_t Size)
 {
     //? Size of string generated in Malloc
+    size_t StringSize = 4*((Size + 2 - ((Size - 1) % 3))/3);
     //! StringSize must have a better equation for this.
-    //* Size + 2 - ((Size - 1) % 3) might fix the issue
-    size_t StringSize;
-    if (Size % 3 == 0)
-        StringSize = (4*(Size + (Size % 3))/3) + 1;
-    else
-        StringSize = (4*(Size + 3 - (Size % 3))/3) + 1;
 
-    3 - Size%3; // 3, 2, 1; NO ZERO
-    (Size - 3) % 3;
-    Size + 3 - (3 - Size%3) + (Size%3);
-    //! 1 -> 3; 2 -> 3; 3-> 3; 4 -> 6; 5 -> 6; 6 -> 6;
-
-    //? The malloc string here is 4 characters per 3 bytes, plus 1 '\0'.
+    //? The malloc string here is 4 characters per 3 bytes w/ pad, plus 1 '\0'.
     char* B64String = malloc(StringSize);
 
     //? This runs all but padding Base64 steps
