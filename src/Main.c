@@ -7,8 +7,7 @@ void PrintData(void* Data, size_t Size);
 
 int main()
 {
-    uint8_t Data[] = {'a', 22, 0x53, 0, '7'};
-    // uint8_t Data[] = "Teste";
+    uint8_t Data[] = "Test Data";
     char* test;
     ByteArr testArr;
     
@@ -24,6 +23,7 @@ int main()
     printf("Size of Data: %lu\n", testArr.Size);
     printf("Data Returned: \n");
     PrintData(testArr.Array, testArr.Size);
+    printf("\n");
 
     free(test);
     free(testArr.Array);
@@ -34,7 +34,7 @@ int main()
 void PrintData(void* Data, size_t Size)
 {
     uint8_t* DataCast = (uint8_t*) Data;
-    for (int i = 0; i < Size - 1; i++)
+    for (size_t i = 0; i < Size - 1; i++)
     {
         printf("0x%X, ", DataCast[i]);
     }

@@ -51,25 +51,24 @@ ByteArr B64toByte(char* B64String)
     //? Find string size (excluding '\0').
     for (CharSize = 0; B64String[CharSize] != '\0'; CharSize++);
     
-    // Calculate size of ByteArr, then malloc
+    //? Calculate size of ByteArr, then malloc
     B64Arr.Size = (CharSize / 4)*3;
     B64Arr.Array = malloc(B64Arr.Size);
 
     for (size_t i = 0, j = 0; i < CharSize; i+=4)
     {
-        //* Fixed inverse and math, this section should be clear
-        B64Arr.Array[j++] = (Base64Inv[B64String[i]] << 2) | (Base64Inv[B64String[i+1]] >> 4);                     //? First 6, next 2
-        B64Arr.Array[j++] = ((Base64Inv[B64String[i+1]] << 4) & 0b11110000) | ((Base64Inv[B64String[i+2]] >> 2));  //? Next 4, third 4
-        B64Arr.Array[j++] = ((Base64Inv[B64String[i+2]] << 6) & 0b11000000) | Base64Inv[B64String[i+3]];           //? third 2, fourth 6
+        B64Arr.Array[j++] = (Base64Inv[B64String[i]] << 2) | (Base64Inv[B64String[i+1]] >> 4);                     //? First 6, Next 2
+        B64Arr.Array[j++] = ((Base64Inv[B64String[i+1]] << 4) & 0b11110000) | ((Base64Inv[B64String[i+2]] >> 2));  //? Next 4,  Third 4
+        B64Arr.Array[j++] = ((Base64Inv[B64String[i+2]] << 6) & 0b11000000) | Base64Inv[B64String[i+3]];           //? Third 2, Fourth 6
     }
-    // Now here, count and remove X amount of bytes for X amount of '=' characters in the B64 string.
-    if (B64String[CharSize-1] == '=')
+    
+    //? Removes padding, if necessary.
+    if (B64String[CharSize-2] == '=')
         B64Arr.Size -= 2;
-    else if (B64String[CharSize] == '=')
+    else if (B64String[CharSize-1] == '=')
         B64Arr.Size -= 1;
     
-    
-    //! Realloc the B64Arr.Array pointer, untested. Should save a maximum of 2 bytes.
+    //? Reallocates the array to account for padding.
     B64Arr.Array = realloc(B64Arr.Array, B64Arr.Size);
 
     //! ByteArr itself should not need to be freed, but ByteArr.Array must be freed by the user.
