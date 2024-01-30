@@ -4,7 +4,7 @@ char Base64Arr[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567
 uint8_t Base64Inv[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 62, 0, 0, 0, 63, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 0, 0, 0, 0, 0, 0, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 0, 0, 0, 0, 0};
 uint8_t InvalidBytes[] = {0x2C, 0x2D, 0x2E, 0x3A, 0x3B, 0x3C, 0x3E, 0x3F, 0x40, 0x5B, 0x5C, 0x5D, 0x5E, 0x5F, 0x60};
 
-bool ValidateB64(char* B64String)
+bool ValidateB64(const char* B64String)
 {
     //? Find string size (excluding '\0').
     size_t StrSize;
@@ -39,7 +39,7 @@ bool ValidateB64(char* B64String)
     return true;
 }
 
-ByteArr B64toByte(char* B64String)
+ByteArr B64toByte(const char* B64String)
 {
     //? If not valid, return NULL pointer and a size of 0.
     if (ValidateB64(B64String) == false)
@@ -75,7 +75,7 @@ ByteArr B64toByte(char* B64String)
     return B64Arr;
 }
 
-char* BytetoB64(uint8_t* Array, size_t Size)
+char* BytetoB64(const uint8_t* Array, size_t Size)
 {
     //? Size of string generated in Malloc
     size_t StringSize = 4*((Size + 2 - ((Size - 1) % 3))/3) + 1;
